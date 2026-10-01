@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Misión Cumpleaños 🎉</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #121212; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #1e1e1e; padding: 25px; border-radius: 16px; width: 100%; max-width: 380px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; }
+    h1 { font-size: 1.4rem; margin-bottom: 10px; color: #ff758c; }
+    p { font-size: 0.95rem; line-height: 1.5; color: #ccc; }
+    input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #333; background: #2a2a2a; color: #fff; font-size: 1rem; box-sizing: border-box; text-align: center; text-transform: uppercase; }
+    button { width: 100%; padding: 12px; background: #ff758c; border: none; border-radius: 8px; color: #fff; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    .hidden { display: none; }
+    .error { color: #ff5252; font-size: 0.85rem; margin-top: 5px; }
+  </style>
+</head>
+<body>
+
+<div class="card" id="box">
+  <!-- Paso 0: Inicio -->
+  <div id="step-0">
+    <h1>¡Feliz Cumpleaños! 🎂</h1>
+    <p>Hay 3 sospechosos escondidos por el campo. ¿Preparada para encontrarlos?</p>
+    <button onclick="nextStep(1)">Empezar misión</button>
+  </div>
+
+  <!-- Paso 1 -->
+  <div id="step-1" class="hidden">
+    <h1>Sospechoso #1 🔍</h1>
+    <p><b>Pista:</b> Busca donde el agua descansa fresca cerca de los árboles.</p>
+    <input type="text" id="pass-1" placeholder="Introduce la palabra clave">
+    <button onclick="checkPass(1, 'CLAVE1')">Desbloquear</button>
+    <div id="err-1" class="error"></div>
+  </div>
+
+  <!-- Paso 2 -->
+  <div id="step-2" class="hidden">
+    <h1>Sospechoso #2 🧸</h1>
+    <p><b>Pista:</b> El segundo está vigilando desde un rincón con sombra donde suele sentarse la gente.</p>
+    <input type="text" id="pass-2" placeholder="Introduce la palabra clave">
+    <button onclick="checkPass(2, 'CLAVE2')">Desbloquear</button>
+    <div id="err-2" class="error"></div>
+  </div>
+
+  <!-- Paso 3 -->
+  <div id="step-3" class="hidden">
+    <h1>El Botín Final 🎁</h1>
+    <p><b>Pista final:</b> El último no vino solo. Ve a mirar dentro de mi mochila / guantera del coche.</p>
+    <input type="text" id="pass-3" placeholder="Introduce la palabra clave">
+    <button onclick="checkPass(3, 'CLAVE3')">Ver sorpresa</button>
+    <div id="err-3" class="error"></div>
+  </div>
+
+  <!-- Final -->
+  <div id="step-4" class="hidden">
+    <h1>¡Misión Cumplida! ❤️</h1>
+    <p>Abre el sobre que acompaña al último muñeco.</p>
+    <p style="font-size:0.85rem; color:#aaa; margin-top:15px;">(Tienes los vales y un audio que puedes escuchar cuando te apetezca)</p>
+  </div>
+</div>
+
+<script>
+  function nextStep(step) {
+    document.querySelectorAll('#box > div').forEach(el => el.classList.add('hidden'));
+    document.getElementById('step-' + step).classList.remove('hidden');
+  }
+
+  function checkPass(step, correct) {
+    const val = document.getElementById('pass-' + step).value.trim().toUpperCase();
+    if (val === correct) {
+      nextStep(step + 1);
+    } else {
+      document.getElementById('err-' + step).innerText = "Clave incorrecta, mira bien el papelito.";
+    }
+  }
+</script>
+</body>
+</html>

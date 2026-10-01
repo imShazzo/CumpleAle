@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OPERACIÓN CUMPLEAÑOS // TERMINAL CLASIFICADA</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Lienzo interactivo del fondo -->
+  <canvas id="cyberCanvas"></canvas>
+  
+  <!-- Efecto de líneas de escaneo de monitor de operaciones -->
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <div class="hud-wrapper">
+    <!-- Barra Superior Táctica -->
+    <header class="hud-topbar">
+      <div class="agent-id">
+        <span class="hud-label">IDENTIDAD:</span>
+        <span class="agent-name">AGENTE ALE ⚡</span>
+      </div>
+      <div class="hud-controls">
+        <button id="btnSound" class="hud-btn-mini" aria-label="Audio">🔊 SFX ON</button>
+        <div class="radar-ping"></div>
+      </div>
+    </header>
+
+    <!-- Indicador de Enlace Seguro -->
+    <div class="satellite-bar">
+      <div class="sat-item"><span class="blink-dot"></span> ENLACE SATÉLITE: SEGURO</div>
+      <div class="sat-item" id="systemClock">00:00:00</div>
+    </div>
+
+    <!-- Barra de Progreso de Misión -->
+    <div class="hud-progress-frame">
+      <div class="progress-info">
+        <span class="progress-title">PROGRESO DEL PERÍMETRO</span>
+        <span class="progress-percent" id="progressPercent">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="node-milestones">
+        <div class="node active" data-step="1"><span>01</span></div>
+        <div class="node" data-step="2"><span>02</span></div>
+        <div class="node" data-step="3"><span>03</span></div>
+        <div class="node" data-step="4"><span>🏆</span></div>
+      </div>
+    </div>
+
+    <!-- Terminal Central de Operaciones -->
+    <main class="cyber-terminal" id="mainTerminal">
+      <!-- Contenido inyectado dinámicamente -->
+    </main>
+
+    <!-- Pie de Sistema -->
+    <footer class="hud-footer">
+      <span>EXPEDIENTE CLASIFICADO #0410 // NIVEL DE ACCESO: MÁXIMO</span>
+      <button id="btnReset" class="system-reset" title="Reiniciar">REINICIAR</button>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
