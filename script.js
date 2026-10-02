@@ -68,6 +68,66 @@ const SFX = {
       });
     } catch(e) {}
   },
+  victory: () => {
+    if (!audioEnabled) return;
+    try {
+      const ctx = getAudioContext();
+      const now = ctx.currentTime;
+      
+      // Fanfarria épica de victoria - capa 1: acordes ascendentes
+      const chord1 = [261.63, 329.63, 392.00]; // C mayor
+      const chord2 = [329.63, 415.30, 493.88]; // E mayor
+      const chord3 = [392.00, 493.88, 587.33]; // G mayor
+      const chord4 = [523.25, 659.25, 783.99, 1046.50]; // C mayor octava alta
+      
+      const playChord = (freqs, startTime, duration, vol = 0.06) => {
+        freqs.forEach((f) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(f, startTime);
+          gain.gain.setValueAtTime(vol, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + duration);
+        });
+      };
+      
+      playChord(chord1, now, 0.4);
+      playChord(chord2, now + 0.15, 0.4);
+      playChord(chord3, now + 0.3, 0.4);
+      playChord(chord4, now + 0.45, 0.8, 0.08);
+      
+      // Capa 2: brillo tipo shimmer con senos
+      [1046.50, 1318.51, 1567.98].forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, now + 0.5 + i * 0.1);
+        gain.gain.setValueAtTime(0.04, now + 0.5 + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2 + i * 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + 0.5 + i * 0.1);
+        osc.stop(now + 1.2 + i * 0.1);
+      });
+      
+      // Capa 3: impacto grave de cierre
+      const sub = ctx.createOscillator();
+      const subGain = ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(80, now + 0.45);
+      sub.frequency.exponentialRampToValueAtTime(40, now + 1.0);
+      subGain.gain.setValueAtTime(0.15, now + 0.45);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+      sub.connect(subGain);
+      subGain.connect(ctx.destination);
+      sub.start(now + 0.45);
+      sub.stop(now + 1.0);
+    } catch(e) {}
+  },
   denied: () => {
     if (!audioEnabled) return;
     try {
@@ -195,25 +255,25 @@ drawBackground();
 // ==========================================
 const MISSIONS = {
   1: {
-    badge: "FASE 01 // SECTOR MEMORIA",
-    title: "El primer guardián",
-    clue: "El primer objetivo se ha resguardado en el lugar donde descansabas antes de que empezaran las obras. Explora tu antigua habitación entre los rincones de siempre.",
+    badge: "FASE 01 // SECTOR CONFIDENCIAL",
+    title: "El santuario actual",
+    clue: "Primer rastro localizado en tu base de operaciones actual. El lugar donde descansas cada noche para recargar energía. No te fíes de lo que ves a simple vista: explora bien entre los rincones de tu propio refugio.",
     code: "MICHAEL",
-    placeholder: "CLAVE DEL 1.ER PELUCHE"
+    placeholder: "CLAVE DEL 1.ER OBJETIVO"
   },
   2: {
-    badge: "FASE 02 // SECTOR CONSTRUCCIÓN",
-    title: "Rumbo al nuevo refugio",
-    clue: "¡Primer objetivo rescatado! El segundo ha avanzado hacia el futuro: búscalo entre herramientas, ladrillo y yeso, donde se está construyendo la habitación nueva.",
+    badge: "FASE 02 // ZONA EN DESARROLLO",
+    title: "El proyecto inacabado",
+    clue: "Señal interceptada. El siguiente objetivo no pertenece al presente, sino al futuro. Se ha refugiado donde huele a polvo, ladrillo y paredes todavía desnudas. Entre lo que aún está a medio levantar, alguien aguarda escondido.",
     code: "JACKSON",
-    placeholder: "CLAVE DEL 2.º PELUCHE"
+    placeholder: "CLAVE DEL 2.º OBJETIVO"
   },
   3: {
-    badge: "FASE 03 // SECTOR EXTERIOR",
-    title: "Aroma a brasa y fuego",
-    clue: "Último sujeto en peligro. Ha buscado el calor del exterior y está vigilando cerca de la zona de la barbacoa, listo para el festejo.",
+    badge: "FASE 03 // SECTOR TÉRMICO",
+    title: "Entre humo y brasas",
+    clue: "Dos objetivos asegurados. La última señal escapa al aire libre, hacia el rincón donde cobran vida el humo y el fuego en los días de reunión. Nada ha quedado a simple vista: el objetivo permanece completamente oculto, esperando a ser descubierto.",
     code: "HAALAND",
-    placeholder: "CLAVE DEL 3.ER PELUCHE"
+    placeholder: "CLAVE DEL 3.ER OBJETIVO"
   }
 };
 
@@ -342,22 +402,22 @@ function checkCode(entered, target, alertEl) {
 }
 
 function renderVictory() {
-  SFX.success();
+  SFX.victory();
   mainTerminal.innerHTML = `
     <div class="victory-screen">
       <div class="medal-hologram">🏆</div>
       <h2 class="victory-title">¡MISIÓN COMPLETADA!</h2>
       <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5;">
-        Has asegurado los 3 objetivos con éxito en el perímetro. La cerradura del cargamento confidencial ha sido desbloqueada.
+        Has asegurado los 3 objetivos con éxito. La cerradura electromagnética del cargamento principal ha sido neutralizada.
       </p>
 
       <div class="coordinates-box">
-        <div class="coords-label">COORDENADAS DEL CARGAMENTO FINAL:</div>
-        <div class="coords-value">LA PARTE DE ATRÁS DE LA CASA DE CAMPO</div>
+        <div class="coords-label">ACERTIJO FINAL:</div>
+        <div class="coords-value">El botín aguarda fuera de los muros de la vivienda. Localiza la puerta exterior apartada, aquel refugio donde descansan las herramientas, cajas y trastos esperando volver a usarse.</div>
       </div>
 
       <p class="victory-footer-note">
-        Acude al punto de extracción, abre tu caja y mira el secreto detrás de cada una de tus Polaroids... ❤️
+        Cruza el umbral exterior, abre el compartimento y reclama tu recompensa.
       </p>
     </div>
   `;
