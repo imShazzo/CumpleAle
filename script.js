@@ -424,24 +424,72 @@ function renderVictory() {
 
   // Explosión de confeti cibernético
   if (typeof confetti === 'function') {
-    const end = Date.now() + 3500;
+    const colors = ['#00f0ff', '#ff007f', '#00ff9d', '#f59e0b', '#ffffff'];
+    
+    // Ráfaga inicial desde ambos lados
+    confetti({
+      particleCount: 80,
+      angle: 60,
+      spread: 70,
+      origin: { x: 0, y: 0.7 },
+      colors: colors,
+      startVelocity: 45,
+      gravity: 0.8,
+      ticks: 200
+    });
+    confetti({
+      particleCount: 80,
+      angle: 120,
+      spread: 70,
+      origin: { x: 1, y: 0.7 },
+      colors: colors,
+      startVelocity: 45,
+      gravity: 0.8,
+      ticks: 200
+    });
+
+    // Lluvia continua desde arriba
+    const end = Date.now() + 4000;
     (function frame() {
       confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 60,
-        origin: { x: 0, y: 0.7 },
-        colors: ['#00f0ff', '#ff007f', '#00ff9d', '#f59e0b']
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 60,
-        origin: { x: 1, y: 0.7 },
-        colors: ['#00f0ff', '#ff007f', '#00ff9d', '#f59e0b']
+        particleCount: 4,
+        angle: 270,
+        spread: 100,
+        origin: { x: Math.random(), y: -0.1 },
+        colors: colors,
+        gravity: 0.6,
+        scalar: 0.9,
+        drift: (Math.random() - 0.5) * 0.5
       });
       if (Date.now() < end) requestAnimationFrame(frame);
     })();
+
+    // Destellos centrales
+    setTimeout(() => {
+      confetti({
+        particleCount: 60,
+        spread: 360,
+        origin: { x: 0.5, y: 0.4 },
+        colors: colors,
+        startVelocity: 25,
+        gravity: 0.5,
+        scalar: 1.2,
+        shapes: ['circle', 'square']
+      });
+    }, 300);
+
+    setTimeout(() => {
+      confetti({
+        particleCount: 40,
+        spread: 360,
+        origin: { x: 0.5, y: 0.3 },
+        colors: colors,
+        startVelocity: 35,
+        gravity: 0.4,
+        scalar: 0.8,
+        shapes: ['circle']
+      });
+    }, 800);
   }
 }
 

@@ -427,6 +427,12 @@ body {
   flex-direction: column;
   gap: 1.3rem;
   align-items: center;
+  animation: victoryAppear 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes victoryAppear {
+  0% { opacity: 0; transform: scale(0.85) translateY(20px); filter: blur(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
 }
 
 .medal-hologram {
