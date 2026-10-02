@@ -1,4 +1,4 @@
-// ==========================================
+gir // ==========================================
 // 1. SISTEMA DE AUDIO TÁCTICO (WEB AUDIO API)
 // Sin dependencias de MP3 ni descargas externas
 // ==========================================
